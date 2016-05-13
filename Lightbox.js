@@ -26,6 +26,8 @@ var Lightbox = React.createClass({
     renderHeader:    PropTypes.func,
     renderContent:   PropTypes.func,
     underlayColor:   PropTypes.string,
+    overlayHeight:   PropTypes.number,
+    overlayWidth:    PropTypes.number,
     backgroundColor: PropTypes.string,
     onOpen:          PropTypes.func,
     onClose:         PropTypes.func,
@@ -79,6 +81,9 @@ var Lightbox = React.createClass({
       backgroundColor: this.props.backgroundColor,
       children: this.getContent(),
       onClose: this.onClose,
+      overlayWidth: this.props.overlayWidth,
+      overlayHeight: this.props.overlayHeight,
+      statusBarOffset: this.props.statusBarOffset
     };
   },
 

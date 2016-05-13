@@ -43,6 +43,9 @@ var LightboxOverlay = React.createClass({
     onOpen:          PropTypes.func,
     onClose:         PropTypes.func,
     swipeToDismiss:  PropTypes.bool,
+    overlayWidth:    PropTypes.number,
+    overlayHeight:   PropTypes.number,
+    statusBarOffset: PropTypes.number,
   },
 
   getInitialState: function() {
@@ -186,13 +189,13 @@ var LightboxOverlay = React.createClass({
 
     var openStyle = [styles.open, {
       left:   openVal.interpolate({inputRange: [0, 1], outputRange: [origin.x, target.x]}),
-      top:    openVal.interpolate({inputRange: [0, 1], outputRange: [origin.y + STATUS_BAR_OFFSET, target.y + STATUS_BAR_OFFSET]}),
-      width:  openVal.interpolate({inputRange: [0, 1], outputRange: [origin.width, WINDOW_WIDTH]}),
-      height: openVal.interpolate({inputRange: [0, 1], outputRange: [origin.height, WINDOW_HEIGHT]}),
+      top:    openVal.interpolate({inputRange: [0, 1], outputRange: [origin.y , target.y]}),
+      width:  openVal.interpolate({inputRange: [0, 1], outputRange: [origin.width, this.props.overlayWidth || WINDOW_WIDTH]}),
+      height: openVal.interpolate({inputRange: [0, 1], outputRange: [origin.height, this.props.overlayHeight || WINDOW_HEIGHT]}),
     }];
 
-    var background = (<Animated.View style={[styles.background, { backgroundColor: backgroundColor }, lightboxOpacityStyle]}></Animated.View>);
-    var header = (<Animated.View style={[styles.header, lightboxOpacityStyle]}>{(renderHeader ?
+    var background = (<Animated.View style={[styles.background, { backgroundColor: backgroundColor, height: this.props.overlayHeight || WINDOW_HEIGHT, width: this.props.overlayWidth || WINDOW_WIDTH }, lightboxOpacityStyle]}></Animated.View>);
+    var header = (<Animated.View style={[styles.header, lightboxOpacityStyle, { width: this.props.overlayWidth || WINDOW_WIDTH }]}>{(renderHeader ?
       renderHeader(this.close) :
       (
         <TouchableOpacity onPress={this.close}>
@@ -229,8 +232,6 @@ var styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
   },
   open: {
     position: 'absolute',
@@ -243,7 +244,6 @@ var styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: WINDOW_WIDTH,
     backgroundColor: 'transparent',
   },
   closeButton: {
